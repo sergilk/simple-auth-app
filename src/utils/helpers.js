@@ -1,0 +1,21 @@
+export const removeSpaceSymbols = value => {
+  return value.replace(/\s/g, "");
+};
+
+export const formattedDate = new Intl.DateTimeFormat(navigator.language, {
+  dateStyle: "medium",
+  timeStyle: "medium"
+}).format(new Date());
+
+export const extractToken = req => {
+  return req.headers["authorization"]?.split(" ")[1];
+};
+
+export const getDataFromInput = (e, setData) => {
+  const { name: inputName, value } = e.target;
+
+  return setData(prev => ({
+    ...prev,
+    [inputName]: removeSpaceSymbols(value)
+  }));
+};

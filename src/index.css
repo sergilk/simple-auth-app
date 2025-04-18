@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: Helvetica, Arial, sans-serif;
+  --animate-borderShrink: borderShrink 1.5s ease-in-out forwards;
+  --animate-dots: dots 1.5s infinite steps(1);
+  --animate-customSpin: customSpin 2s infinite ease-in-out;
+
+  @keyframes borderShrink {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0%;
+    }
+  }
+
+  @keyframes dots {
+    0% {
+      content: ".";
+    }
+    33% {
+      content: "..";
+    }
+    66% {
+      content: "...";
+    }
+  }
+
+  @keyframes customSpin {
+    0% {
+      transform: rotate(0deg);
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.7;
+    }
+    50% {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+    75% {
+      opacity: 0.7;
+    }
+    100% {
+      transform: rotate(360deg);
+      opacity: 1;
+    }
+  }
+}
