@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { usersDB } from "../../data/usersDB.js";
-import { SECRET_KEY } from "../config/env.js";
 import { validateUserInputs } from "../../utils/validation.js";
 
 const generateToken = user => {
@@ -13,7 +12,7 @@ const generateToken = user => {
       userEmail: user.userEmail,
       regDate: user.regDate
     },
-    SECRET_KEY,
+    process.env.TOKEN_KEY,
     { expiresIn: "10m" } // after this time, the user will be automatically deauthorized
   );
 };

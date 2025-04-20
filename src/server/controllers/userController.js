@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import { usersDB } from "../../data/usersDB.js";
 import { extractToken } from "../../utils/helpers.js";
 import { validateUserInputs, validationRules } from "../../utils/validation.js";
-import { SECRET_KEY } from "../config/env.js";
 
 export const getUserData = (req, res) => {
   const token = extractToken(req);
@@ -12,7 +11,7 @@ export const getUserData = (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.TOKEN_KEY);
     const currentTime = Math.floor(Date.now() / 1000);
     const tokenHasExpired = decoded.exp <= currentTime;
 
@@ -53,7 +52,7 @@ export const updateUserProfile = (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const currentTime = Math.floor(Date.now() / 1000);
     const tokenHasExpired = decoded.exp <= currentTime;
 

@@ -6,15 +6,7 @@ import path from "path";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    proxy: {
-      "/API": {
-        target: "http://localhost:3000",
-        changeOrigin: false,
-        secure: false
-      }
-    }
-  },
+  base: "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

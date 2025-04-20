@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { SECRET_KEY } from "../config/env.js";
 import { extractToken } from "../../utils/helpers.js";
 
 export const authenticateToken = (req, res, next) => {
@@ -9,7 +8,7 @@ export const authenticateToken = (req, res, next) => {
     return res.status(401).json({ success: false, message: "Access denied" });
   }
 
-  jwt.verify(token, SECRET_KEY, (err, user) => {
+  jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
     if (err) {
       return res.status(401).json({
         success: false,
