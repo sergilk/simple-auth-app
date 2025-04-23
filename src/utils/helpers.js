@@ -8,7 +8,11 @@ export const formattedDate = new Intl.DateTimeFormat(navigator.language, {
 }).format(new Date());
 
 export const extractToken = req => {
-  return req.headers["authorization"]?.split(" ")[1];
+  const authHeader = req.headers.authorization || req.headers.Authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return null;
+  }
+  return authHeader.split(" ")[1];
 };
 
 export const getDataFromInput = (e, setData) => {

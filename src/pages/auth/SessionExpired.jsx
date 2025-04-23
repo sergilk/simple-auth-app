@@ -6,7 +6,7 @@ const SessionExpired = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      sessionStorage.clear();
+      localStorage.clear();
       navigate("/login");
     }, 5000);
   }, []);

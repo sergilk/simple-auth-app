@@ -13,8 +13,8 @@ function App() {
           <Routes>
             <Route path="/" element={<StarterPage />} />
             <Route path="/login" element={<AuthForm type="login" />} />
-            <Route path="/registration" element={<AuthForm type="signup" />} />
-            <Route path="/user" element={<UserProfile />} />
+            <Route path="/signup" element={<AuthForm type="signup" />} />
+            <Route path="/profile" element={<UserProfile />} />
             <Route path="/session-expired" element={<SessionExpired />} />
           </Routes>
         </AppContainer>

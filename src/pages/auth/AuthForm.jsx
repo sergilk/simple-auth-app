@@ -5,7 +5,8 @@ import {
   getDataFromInput,
   formattedDate,
   getErrorMessage,
-  validateUserInputs
+  validateUserInputs,
+  API_URL
 } from "@utils";
 import { getAuthFields } from "@data";
 import FormContainer from "@components/layout/FormContainer";
@@ -65,7 +66,7 @@ const AuthForm = ({ type = "login" }) => {
 
       const { URL, requestData, AuthAction } = isSignUp
         ? {
-            URL: "http://localhost:3000/API/signup",
+            URL: API_URL("/auth/signup"),
             requestData: {
               userName: data.userName,
               userEmail: data.userEmail,
@@ -84,16 +85,16 @@ const AuthForm = ({ type = "login" }) => {
             }
           }
         : {
-            URL: "http://localhost:3000/API/login",
+            URL: API_URL("/auth/login"),
             requestData: {
               userName: data.userName,
               password: data.password
             },
             AuthAction: result => {
-              sessionStorage.setItem("userName", result.userName);
-              sessionStorage.setItem("userEmail", result.userEmail);
-              sessionStorage.setItem("token", result.token);
-              navigate("/user");
+              localStorage.setItem("userName", result.userName);
+              localStorage.setItem("userEmail", result.userEmail);
+              localStorage.setItem("token", result.token);
+              navigate("/profile");
             }
           };
 

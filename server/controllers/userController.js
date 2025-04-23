@@ -1,17 +1,21 @@
 import jwt from "jsonwebtoken";
-import { usersDB } from "../../data/usersDB.js";
-import { extractToken } from "../../utils/helpers.js";
-import { validateUserInputs, validationRules } from "../../utils/validation.js";
+import { usersDB } from "../../src/data/usersDB.js";
+import { extractToken } from "../../src/utils/helpers.js";
+import {
+  validateUserInputs,
+  validationRules
+} from "../../src/utils/validation.js";
 
 export const getUserData = (req, res) => {
   const token = extractToken(req);
+  const JWT_KEY = process.env.JWT_TOKEN_KEY;
 
   if (!token) {
     return res.status(401).json({ success: false, message: "Access denied" });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+    const decoded = jwt.verify(token, JWT_KEY);
     const currentTime = Math.floor(Date.now() / 1000);
     const tokenHasExpired = decoded.exp <= currentTime;
 
@@ -40,19 +44,21 @@ export const getUserData = (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
 export const updateUserProfile = (req, res) => {
   const { userName, userEmail } = req.body;
   const token = extractToken(req);
+  const JWT_KEY = process.env.JWT_TOKEN_KEY;
 
   if (!token) {
     return res.status(401).json({ success: false, message: "Access denied" });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, JWT_KEY);
     const currentTime = Math.floor(Date.now() / 1000);
     const tokenHasExpired = decoded.exp <= currentTime;
 
@@ -69,11 +75,6 @@ export const updateUserProfile = (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "User not found!" });
-    }
-
-    if (user) {
-      user.userName = userName;
-      user.userEmail = userEmail;
     }
 
     const fieldError = validateUserInputs({
@@ -98,6 +99,11 @@ export const updateUserProfile = (req, res) => {
       });
     }
 
+    if (user) {
+      user.userName = userName;
+      user.userEmail = userEmail;
+    }
+
     res.json({
       success: true,
       message: "Profile updated successfully",
@@ -108,5 +114,6 @@ export const updateUserProfile = (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };

@@ -1,14 +1,15 @@
 import jwt from "jsonwebtoken";
-import { extractToken } from "../../utils/helpers.js";
+import { extractToken } from "../../src/utils/helpers.js";
 
 export const authenticateToken = (req, res, next) => {
   const token = extractToken(req);
+  const JWT_KEY = process.env.JWT_TOKEN_KEY;
 
   if (!token) {
     return res.status(401).json({ success: false, message: "Access denied" });
   }
 
-  jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
+  jwt.verify(token, JWT_KEY, (err, user) => {
     if (err) {
       return res.status(401).json({
         success: false,

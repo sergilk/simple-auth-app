@@ -8,7 +8,7 @@ import { authenticateToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/user", requestLimiter, authenticateToken, getUserData);
-router.put("/user", requestLimiter, authenticateToken, updateUserProfile);
+router.get("/profile", requestLimiter, authenticateToken, getUserData);
+router.put("/profile", requestLimiter, authenticateToken, updateUserProfile);
 
 export default router;

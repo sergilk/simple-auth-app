@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "node src/server/server.js",
+    "server": "node server/server.js",
     "start": "npm run server",
-    "localServer": "nodemon src/server/server.js",
-    "startLocal": "concurrently \"npm run localServer\" \"npm run dev\"",
+    "startLocal": "concurrently \"nodemon server.js\" \"npm run dev\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

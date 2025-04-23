@@ -9,3 +9,4 @@ export {
   validateUserInputs,
   getErrorMessage
 } from "./validation.js";
+export { API_URL } from "./api.js";

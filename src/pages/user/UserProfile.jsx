@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext.jsx";
-import { getErrorMessage, validateUserInputs, getDataFromInput } from "@utils";
+import {
+  getErrorMessage,
+  validateUserInputs,
+  getDataFromInput,
+  API_URL
+} from "@utils";
 import { getProfileFields } from "@data";
 import FormContainer from "@components/layout/FormContainer";
 import { FormInput, ActionButton, Loading } from "@ui";
@@ -9,15 +14,15 @@ import { FormInput, ActionButton, Loading } from "@ui";
 const UserProfile = () => {
   const { setAuthSuccess } = useAuth();
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   const [data, setData] = useState({
-    userName: sessionStorage.getItem("userName"),
-    userEmail: sessionStorage.getItem("userEmail")
+    userName: localStorage.getItem("userName"),
+    userEmail: localStorage.getItem("userEmail")
   });
   const [serverData, setServerData] = useState({
-    regDate: sessionStorage.getItem("regDate"),
-    totalUsers: sessionStorage.getItem("totalUsers")
+    regDate: localStorage.getItem("regDate"),
+    totalUsers: localStorage.getItem("totalUsers")
   });
   const [customErrors, setCustomErrors] = useState({
     errorCount: 0,
@@ -28,7 +33,9 @@ const UserProfile = () => {
     userEmail: false
   });
 
-  document.title = `Welcome ${data.userName}!`;
+  useEffect(() => {
+    document.title = `Welcome ${data.userName}!`;
+  }, [data.userName]);
 
   const fieldError = useMemo(() => {
     return validateUserInputs({
@@ -43,7 +50,7 @@ const UserProfile = () => {
 
   const getUserData = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3000/API/user", {
+      const response = await fetch(API_URL("/user/profile"), {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +92,7 @@ const UserProfile = () => {
   const handleSave = useCallback(
     async input => {
       try {
-        const response = await fetch("http://localhost:3000/API/user", {
+        const response = await fetch(API_URL("/user/profile"), {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -107,8 +114,8 @@ const UserProfile = () => {
             regDate: result.regDate,
             totalUsers: result.totalUsers
           }));
-          sessionStorage.setItem("userName", result.userName);
-          sessionStorage.setItem("userEmail", result.userEmail);
+          localStorage.setItem("userName", result.userName);
+          localStorage.setItem("userEmail", result.userEmail);
 
           setIsFieldEditing(prev => ({
             ...prev,
@@ -140,7 +147,7 @@ const UserProfile = () => {
   );
 
   const saveNewValue = input => {
-    const currentValue = sessionStorage.getItem(input);
+    const currentValue = localStorage.getItem(input);
     const newValue = data[input];
 
     if (currentValue === newValue) {
@@ -176,11 +183,11 @@ const UserProfile = () => {
   };
 
   const userLogOut = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userName");
-    sessionStorage.removeItem("userEmail");
-    sessionStorage.removeItem("regDate");
-    sessionStorage.removeItem("totalUsers");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("regDate");
+    localStorage.removeItem("totalUsers");
   };
 
   useEffect(() => {
@@ -196,14 +203,16 @@ const UserProfile = () => {
   useEffect(() => {
     if (!token) return;
 
-    getUserData();
+    if (token) {
+      getUserData();
+    }
 
     const intervalId = setInterval(() => {
       getUserData();
     }, 62000); // every 62s this timer checks token validity and refresh user data if token valid
 
     return () => clearInterval(intervalId);
-  }, [token, getUserData]);
+  }, [token]);
 
   if (!token) {
     return <Navigate to="/" replace />;
